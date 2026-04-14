@@ -70,4 +70,4 @@ public/uploads/
 # ========================
 # TypeScript (if used later)
 # ========================
-*.tsbuildinfobe-prochat/*.json
+*.tsbuildinfo
