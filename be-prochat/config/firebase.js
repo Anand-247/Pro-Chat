@@ -8,7 +8,7 @@ let firebaseAdmin = null;
 try {
   // You need to place your serviceAccountKey.json in the be-prochat root or 
   // provide the path via GOOGLE_APPLICATION_CREDENTIALS env var.
-  const serviceAccount = require("../serviceAccountKey.json");
+  const serviceAccount = require("../pro-chat-bafb7-firebase-adminsdk-fbsvc-85fac2d43a.json");
 
   firebaseAdmin = admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
