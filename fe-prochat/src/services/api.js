@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // const API_URL = "http://localhost:8000/api";
-const API_URL = "http://192.168.31.204:8000/api";
+// const API_URL = "http://192.168.31.204:8000/api";
+const API_URL = "https://pro-chat-1yz3.onrender.com/api";
 
 const api = axios.create({
   baseURL: API_URL,
