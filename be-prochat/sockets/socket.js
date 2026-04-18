@@ -11,11 +11,13 @@ const initSocket = async (server) => {
 
   try {
     redisClient = createClient({
-      url: process.env.REDIS_URL || "redis://localhost:6379",
+      username: 'default',
+      password: process.env.REDIS_PASSWORD,
       socket: {
-        reconnectStrategy: false
+          host: process.env.REDIS_HOST,
+          port: process.env.REDIS_PORT
       }
-    });
+  });
     
     redisClient.on("error", (err) => {
       console.error("Redis Client Error", err.message);
