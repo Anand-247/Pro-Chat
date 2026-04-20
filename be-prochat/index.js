@@ -16,7 +16,12 @@ const app = express();
 const server = http.createServer(app);
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://pro-chat-fhc4k1djn-anandcoder1-1985s-projects.vercel.app", // your frontend URL
+    credentials: true, // if using cookies/auth
+  })
+);
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", require("./routes/user.routes"));
