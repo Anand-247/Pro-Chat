@@ -18,8 +18,7 @@ const server = http.createServer(app);
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://pro-chat-fhc4k1djn-anandcoder1-1985s-projects.vercel.app",
-  "https://pro-chat-git-main-anandcoder1-1985s-projects.vercel.app"
+  "https://pro-chat-smoky.vercel.app"
 ];
 
 app.use(
