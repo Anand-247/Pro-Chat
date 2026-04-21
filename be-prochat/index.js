@@ -16,10 +16,22 @@ const app = express();
 const server = http.createServer(app);
 
 // Middleware
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://pro-chat-fhc4k1djn-anandcoder1-1985s-projects.vercel.app",
+  "https://pro-chat-git-main-anandcoder1-1985s-projects.vercel.app"
+];
+
 app.use(
   cors({
-    origin: "https://pro-chat-fhc4k1djn-anandcoder1-1985s-projects.vercel.app", // your frontend URL
-    credentials: true, // if using cookies/auth
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    // credentials: true,
   })
 );
 app.use(express.json());
