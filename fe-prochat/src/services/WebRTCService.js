@@ -17,17 +17,52 @@ class WebRTCService {
     };
   }
 
-  async startLocalStream() {
+  async startLocalStream(callType = "voice") {
     try {
       this.localStream = await navigator.mediaDevices.getUserMedia({ 
         audio: true, 
-        video: false 
+        video: callType === "video" 
       });
       this.onLocalStream(this.localStream);
       return this.localStream;
     } catch (error) {
-      console.error("Error accessing microphone", error);
+      console.error("Error accessing media devices", error);
       throw error;
+    }
+  }
+
+  toggleVideo(enabled) {
+    if (this.localStream) {
+      this.localStream.getVideoTracks().forEach(track => {
+        track.enabled = enabled;
+      });
+    }
+  }
+
+  toggleAudio(enabled) {
+    if (this.localStream) {
+      this.localStream.getAudioTracks().forEach(track => {
+        track.enabled = enabled;
+      });
+    }
+  }
+
+  async addVideoTrack() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const videoTrack = stream.getVideoTracks()[0];
+      if (this.localStream) {
+        this.localStream.addTrack(videoTrack);
+        if (this.peerConnection) {
+          this.peerConnection.addTrack(videoTrack, this.localStream);
+          // Renegotiation might be needed here, but for simplicity we'll assume camera is either on or off from start
+          // or we just enable/disable existing track if we requested both initially.
+          // In a real app, you'd do createOffer again.
+        }
+      }
+      return videoTrack;
+    } catch (err) {
+      console.error("Failed to add video track", err);
     }
   }
 
@@ -61,7 +96,7 @@ class WebRTCService {
   }
 
   async createOffer(recipientId, userFrom, callType) {
-    await this.startLocalStream();
+    await this.startLocalStream(callType);
     this.initPeerConnection(recipientId);
 
     const offer = await this.peerConnection.createOffer();
@@ -75,8 +110,8 @@ class WebRTCService {
     });
   }
 
-  async handleOffer(offer, callerId) {
-    await this.startLocalStream();
+  async handleOffer(offer, callerId, callType) {
+    await this.startLocalStream(callType);
     this.initPeerConnection(callerId);
 
     await this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMessages, sendMessage, addMessageSockets, deleteMessageAction, updateMessageSockets, addOptimisticMessage, replaceOptimisticMessage, updateMessageStatus, updateAllMessagesStatus, updateGroupMessageReadBy, editMessageAction, reactToMessageAction, replaceSingleMessage } from "../store/messageSlice";
 import { setOnlineUsers } from "../store/authSlice";
 import { updateChatLatestMessage, deleteChatAction, clearChatAction, removeChatLocally, setActiveChat, setTypingChat, updateMemberRoleAction, fetchChats } from "../store/chatSlice";
-import { Send, Smile, Paperclip, MoreVertical, Loader2, Trash2, Clock, Check, CheckCheck, Edit2, Trash, X, Info, LogOut, UserMinus, Plus, Crown, ShieldCheck, UserX, UserCheck, Phone } from "lucide-react";
+import { Send, Smile, Paperclip, MoreVertical, Loader2, Trash2, Clock, Check, CheckCheck, Edit2, Trash, X, Info, LogOut, UserMinus, Plus, Crown, ShieldCheck, UserX, UserCheck, Phone, Video, ArrowLeft } from "lucide-react";
 import api from "../services/api";
 import { getSocket } from "../services/socket";
 import { setActiveCall } from "../store/callSlice";
@@ -376,8 +376,14 @@ const ChatWindow = ({ webrtcService }) => {
   return (
     <div className="glass-container h-full w-full flex flex-col overflow-hidden relative">
       {/* Header */}
-      <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-900/40 z-10">
-        <div className="flex items-center gap-4">
+      <div className="p-3 md:p-4 border-b border-white/10 flex justify-between items-center bg-slate-900/40 z-10">
+        <div className="flex items-center gap-2 md:gap-4">
+          <button 
+            onClick={() => dispatch(setActiveChat(null))} 
+            className="p-2 -ml-2 md:hidden text-slate-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={24} />
+          </button>
           <div className="relative">
             <img src={getChatAvatar()} alt="avatar" className="w-10 h-10 rounded-full object-cover border border-white/10" />
             {isChatUserOnline() && (
@@ -399,13 +405,22 @@ const ChatWindow = ({ webrtcService }) => {
         </div>
         <div className="flex items-center gap-2 relative">
           {!activeChat.isGroupChat && (
-            <button 
-              onClick={() => initiateCall("voice")} 
-              className="p-2.5 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:text-primary"
-              title="Voice Call"
-            >
-              <Phone size={20} />
-            </button>
+            <>
+              <button 
+                onClick={() => initiateCall("video")} 
+                className="p-2.5 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:text-primary"
+                title="Video Call"
+              >
+                <Video size={20} />
+              </button>
+              <button 
+                onClick={() => initiateCall("voice")} 
+                className="p-2.5 hover:bg-white/10 rounded-full transition-colors text-slate-300 hover:text-primary"
+                title="Voice Call"
+              >
+                <Phone size={20} />
+              </button>
+            </>
           )}
           <button onClick={() => setShowOptionsDropdown(!showOptionsDropdown)} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
             <MoreVertical size={20} />

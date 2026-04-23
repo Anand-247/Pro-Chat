@@ -20,6 +20,9 @@ const callSlice = createSlice({
     activeCall: null, // { id, caller, receiver, type, signal, status: 'ongoing' | 'incoming' | 'outgoing' | 'accepted' }
     incomingCall: null, // { from, signal, type, callId }
     isMuted: false,
+    isVideoEnabled: false,
+    isCameraPaused: false,
+    remoteMediaStatus: { audio: true, video: true },
     localStream: null,
     remoteStream: null,
     isLoading: false,
@@ -34,11 +37,16 @@ const callSlice = createSlice({
     },
     setActiveCall: (state, action) => {
       state.activeCall = action.payload;
+      state.isVideoEnabled = action.payload?.type === "video";
     },
     clearActiveCall: (state) => {
       state.activeCall = null;
       state.localStream = null;
       state.remoteStream = null;
+      state.isMuted = false;
+      state.isVideoEnabled = false;
+      state.isCameraPaused = false;
+      state.remoteMediaStatus = { audio: true, video: true };
     },
     setLocalStream: (state, action) => {
       state.localStream = action.payload;
@@ -48,6 +56,16 @@ const callSlice = createSlice({
     },
     toggleMute: (state) => {
       state.isMuted = !state.isMuted;
+    },
+    toggleVideo: (state) => {
+      state.isVideoEnabled = !state.isVideoEnabled;
+    },
+    setCameraPaused: (state, action) => {
+      state.isCameraPaused = action.payload;
+    },
+    updateRemoteMediaStatus: (state, action) => {
+      const { type, enabled } = action.payload;
+      state.remoteMediaStatus[type] = enabled;
     },
   },
   extraReducers: (builder) => {
@@ -73,7 +91,10 @@ export const {
   clearActiveCall, 
   setLocalStream, 
   setRemoteStream, 
-  toggleMute 
+  toggleMute,
+  toggleVideo,
+  setCameraPaused,
+  updateRemoteMediaStatus
 } = callSlice.actions;
 
 export default callSlice.reducer;

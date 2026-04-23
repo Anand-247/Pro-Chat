@@ -229,6 +229,11 @@ const initSocket = async (server) => {
     socket.on("call-busy", ({ to }) => {
       socket.to(to).emit("call-rejected", { reason: "busy" });
     });
+
+    socket.on("toggle-media", ({ to, type, enabled }) => {
+      // type: 'audio' | 'video'
+      socket.to(to).emit("media-toggled", { type, enabled });
+    });
     
     socket.on("disconnect", async () => {
       console.log("USER DISCONNECTED", socket.userId);
