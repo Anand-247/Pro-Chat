@@ -33,7 +33,7 @@ const CallOverlay = ({ socket, webrtcService }) => {
     if (remoteVideoRef.current && remoteStream) {
       remoteVideoRef.current.srcObject = remoteStream;
     }
-  }, [remoteStream]);
+  }, [remoteStream, remoteMediaStatus.video, activeCall?.type]);
 
   useEffect(() => {
     if (localVideoRef.current && localStream) {

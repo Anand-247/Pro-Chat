@@ -39,6 +39,11 @@ const callSlice = createSlice({
       state.activeCall = action.payload;
       state.isVideoEnabled = action.payload?.type === "video";
     },
+    setCallStatus: (state, action) => {
+      if (state.activeCall) {
+        state.activeCall.status = action.payload;
+      }
+    },
     clearActiveCall: (state) => {
       state.activeCall = null;
       state.localStream = null;
@@ -94,7 +99,8 @@ export const {
   toggleMute,
   toggleVideo,
   setCameraPaused,
-  updateRemoteMediaStatus
+  updateRemoteMediaStatus,
+  setCallStatus
 } = callSlice.actions;
 
 export default callSlice.reducer;

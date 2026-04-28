@@ -6,12 +6,11 @@ import ChatWindow from "./ChatWindow";
 import CallOverlay from "./CallOverlay";
 import { getSocket } from "../services/socket";
 import WebRTCService from "../services/WebRTCService";
-import { setIncomingCall, setActiveCall, setRemoteStream, setLocalStream, clearActiveCall, updateRemoteMediaStatus } from "../store/callSlice";
+import { setIncomingCall, setActiveCall, setRemoteStream, setLocalStream, clearActiveCall, updateRemoteMediaStatus, setCallStatus } from "../store/callSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { activeCall } = useSelector((state) => state.call);
 
   // Use a ref for webrtcService to persist across re-renders
   const webrtcServiceRef = React.useRef(null);
@@ -37,7 +36,7 @@ const Dashboard = () => {
 
       socket.on("call-accepted", async (signal) => {
         await webrtcServiceRef.current.handleAnswer(signal);
-        dispatch(setActiveCall({ ...activeCall, status: "accepted" }));
+        dispatch(setCallStatus("accepted"));
       });
 
       socket.on("ice-candidate", async (candidate) => {
@@ -68,7 +67,7 @@ const Dashboard = () => {
         socket.off("call-ended");
       };
     }
-  }, [dispatch, user, activeCall]);
+  }, [dispatch, user]);
 
   const { activeChat } = useSelector((state) => state.chat);
 

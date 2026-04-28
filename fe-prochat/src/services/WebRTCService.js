@@ -77,9 +77,12 @@ class WebRTCService {
     // Listen for remote tracks
     this.peerConnection.ontrack = (event) => {
       event.streams[0].getTracks().forEach((track) => {
-        this.remoteStream.addTrack(track);
+        if (!this.remoteStream.getTracks().includes(track)) {
+          this.remoteStream.addTrack(track);
+        }
       });
-      this.onRemoteStream(this.remoteStream);
+      // Create a new stream object to force React/Redux to detect the state change
+      this.onRemoteStream(new MediaStream(this.remoteStream.getTracks()));
     };
 
     // Listen for ICE candidates
